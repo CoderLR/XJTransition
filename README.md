@@ -113,5 +113,11 @@ enum XJTransitionAnimationType: Int {
     case flipFromLeft
     case flipFromBottom
     case flipFromTop
+    
+    // 弹出效果
+    case presentFromRight
+    case presentFromLeft
+    case presentFromBottom
+    case presentFromTop
 }
 ```
