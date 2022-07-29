@@ -12,10 +12,8 @@ pod 'XJTransition'
 ![page.gif](https://upload-images.jianshu.io/upload_images/28320442-74ca4d95e59a6e1f.gif?imageMogr2/auto-orient/strip)
 - pageFromLeft  
 ![spreadPoint.gif](https://upload-images.jianshu.io/upload_images/28320442-2c7f2aa06d981ee1.gif?imageMogr2/auto-orient/strip)
-- spreadFromLeft  
-![spreadRight.gif](https://upload-images.jianshu.io/upload_images/28320442-ca25e8d6c1f8e565.gif?imageMogr2/auto-orient/strip)
-- fragmentShowFromRight  
-![fragmentRight.gif](https://upload-images.jianshu.io/upload_images/28320442-2afa463735a7eb1f.gif?imageMogr2/auto-orient/strip)
+
+......  
 
 ### 动画类型
 ```
