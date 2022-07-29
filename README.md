@@ -1,6 +1,11 @@
 ## iOS动画集
 
-###动画效果
+### CocoaPods
+```
+pod 'XJTransition'
+```
+
+### 动画效果
 - brickOpenHorizontal  
 ![brickCloseH.gif](https://upload-images.jianshu.io/upload_images/28320442-08fb1c3cc3ea12a9.gif?imageMogr2/auto-orient/strip)
 - pointSpread  
@@ -12,7 +17,7 @@
 - fragmentShowFromRight  
 ![fragmentRight.gif](https://upload-images.jianshu.io/upload_images/28320442-2afa463735a7eb1f.gif?imageMogr2/auto-orient/strip)
 
-###动画类型
+### 动画类型
 ```
 // MARK: - 动画类型
 enum XJTransitionAnimationType: Int {
