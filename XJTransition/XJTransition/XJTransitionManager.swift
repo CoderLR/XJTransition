@@ -16,6 +16,8 @@ class XJTransitionManager: NSObject {
             self.animationTime = property?.animationTime ?? 0.5
             self.isSystemBack = property?.isSystemBack ?? false
             self.isPushHidenNav = property?.isPushHidenNav ?? true
+            self.startView = property?.startView
+            self.targetView = property?.targetView
         }
     }
     
@@ -40,6 +42,10 @@ class XJTransitionManager: NSObject {
             self.backAnimationType = setBackAnimationType(type: animationType)
         }
     }
+    
+    /// Zoom动画从一个view转场到另一个view
+    fileprivate var startView: UIView?
+    fileprivate var targetView: UIView?
     
     /// 返回动画类型
     fileprivate var backAnimationType: XJTransitionAnimationType = .normal
@@ -134,8 +140,10 @@ class XJTransitionManager: NSObject {
             case .brickCloseHorizontal,
                  .brickCloseVertical:
                 self.brickCloseTransitionAnimation(type: type)
-            case .inside:
-                self.insideTransitionAnimation(type: type)
+            case .insideVertical:
+                self.insideVTransitionAnimation(type: type)
+            case .insideHorizontal:
+                self.insideHTransitionAnimation(type: type)
             case .fragmentShowFromRight,
                  .fragmentShowFromLeft,
                  .fragmentShowFromTop,
@@ -159,6 +167,9 @@ class XJTransitionManager: NSObject {
                  .presentFromTop,
                  .presentFromBottom:
                 self.presentTransitionAnimation(type: type)
+            case .zoomNormal,
+                 .zoomSpring:
+                self.zoomTransitionAnimation(type: type)
             default: break
             }
         } else {
@@ -185,8 +196,10 @@ class XJTransitionManager: NSObject {
             case .brickCloseHorizontal,
                  .brickCloseVertical:
                 self.brickCloseTransitionBackAnimation(type: type)
-            case .inside:
-                self.insideTransitionBackAnimation(type: type)
+            case .insideVertical:
+                self.insideVTransitionBackAnimation(type: type)
+            case .insideHorizontal:
+                self.insideHTransitionBackAnimation(type: type)
             case .fragmentShowFromRight,
                  .fragmentShowFromLeft,
                  .fragmentShowFromTop,
@@ -210,6 +223,9 @@ class XJTransitionManager: NSObject {
                  .presentFromTop,
                  .presentFromBottom:
                 self.presentTransitionBackAnimation(type: type)
+            case .zoomNormal,
+                 .zoomSpring:
+                self.zoomTransitionBackAnimation(type: type)
             default: break
             }
         }
@@ -802,7 +818,7 @@ extension XJTransitionManager {
         
         tempView.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
         
-        UIView.animate(withDuration: self.animationTime, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 1.0 / 0.4, options: UIView.AnimationOptions.init(rawValue: 0)) {
+        UIView.animate(withDuration: self.animationTime, delay: 0, usingSpringWithDamping: 0.3, initialSpringVelocity: 3, options: UIView.AnimationOptions.init(rawValue: 0)) {
             tempView.layer.transform = CATransform3DIdentity
         } completion: { finished in
             if self.transitionContext?.transitionWasCancelled ?? false {
@@ -1121,7 +1137,83 @@ extension XJTransitionManager {
 
 // MARK: - inside动画
 extension XJTransitionManager {
-    func insideTransitionAnimation(type: XJTransitionAnimationType) {
+    
+    func insideVTransitionAnimation(type: XJTransitionAnimationType) {
+        guard let containerView = transitionContext?.containerView else { return }
+        guard let fromView = fromVc?.view else { return }
+        guard let toView = toVc?.view else { return }
+        guard let tempFromView = fromVc?.view?.snapshotView(afterScreenUpdates: true) else { return }
+        
+        containerView.addSubview(fromView)
+        containerView.addSubview(tempFromView)
+        containerView.addSubview(toView)
+
+        let screenH = UIScreen.main.bounds.size.height
+        
+        toView.layer.transform = CATransform3DMakeTranslation(0, screenH, 0)
+        
+        UIView.animate(withDuration: self.animationTime) {
+            fromView.layer.transform = CATransform3DMakeScale(0.95, 0.95, 1)
+            tempFromView.layer.transform = CATransform3DMakeScale(0.95, 0.95, 1)
+//            toView.layer.transform = CATransform3DIdentity
+            toView.layer.transform = CATransform3DMakeTranslation(0, screenH * 0.2, 0)
+        } completion: { finished in
+            if self.transitionContext?.transitionWasCancelled ?? false {
+                self.transitionContext?.completeTransition(false)
+            } else {
+                self.transitionContext?.completeTransition(true)
+            }
+            fromView.layer.transform = CATransform3DIdentity
+        }
+    }
+    
+    func insideVTransitionBackAnimation(type: XJTransitionAnimationType) {
+        
+        guard let tempToView = toVc?.view?.snapshotView(afterScreenUpdates: true) else { return }
+        guard let containerView = transitionContext?.containerView else { return }
+        guard let fromView = fromVc?.view else { return }
+        guard let toView = toVc?.view else { return }
+        
+        containerView.addSubview(toView)
+        containerView.addSubview(tempToView)
+        containerView.addSubview(fromView)
+        
+        let screenH = UIScreen.main.bounds.size.height
+        
+        toView.layer.transform = CATransform3DMakeScale(0.95, 0.95, 1)
+        tempToView.layer.transform = CATransform3DMakeScale(0.95, 0.95, 1)
+        fromView.layer.transform = CATransform3DMakeTranslation(0, screenH * 0.2, 0)
+        
+        UIView.animate(withDuration: self.animationTime) {
+            fromView.layer.transform = CATransform3DMakeTranslation(0, screenH, 0)
+            toView.layer.transform = CATransform3DIdentity
+            tempToView.layer.transform = CATransform3DIdentity
+        } completion: { finished in
+            if self.transitionContext?.transitionWasCancelled ?? false {
+                self.transitionContext?.completeTransition(false)
+            } else {
+                self.transitionContext?.completeTransition(true)
+            }
+            toView.isHidden = false
+            tempToView.removeFromSuperview()
+        }
+        
+        self.endInteractiveBlock = { (success) in
+            if success {
+                toView.layer.transform = CATransform3DIdentity
+                fromView.isHidden = true
+                containerView.addSubview(tempToView)
+            } else {
+                fromView.isHidden = false
+                toView.layer.transform = CATransform3DIdentity
+                tempToView.removeFromSuperview()
+                containerView.addSubview(tempToView)
+            }
+        }
+    }
+    
+
+    func insideHTransitionAnimation(type: XJTransitionAnimationType) {
         guard let containerView = transitionContext?.containerView else { return }
         guard let fromView = fromVc?.view else { return }
         guard let toView = toVc?.view else { return }
@@ -1145,7 +1237,7 @@ extension XJTransitionManager {
         }
     }
     
-    func insideTransitionBackAnimation(type: XJTransitionAnimationType) {
+    func insideHTransitionBackAnimation(type: XJTransitionAnimationType) {
         
         guard let tempToView = toVc?.view?.snapshotView(afterScreenUpdates: true) else { return }
         guard let tempFromView = fromVc?.view?.snapshotView(afterScreenUpdates: true) else { return }
@@ -1821,6 +1913,122 @@ extension XJTransitionManager {
                 
             }
             tempView.removeFromSuperview()
+        }
+    }
+}
+
+// MARK: - Zoom动画
+extension XJTransitionManager {
+    func zoomTransitionAnimation(type: XJTransitionAnimationType) {
+        guard let containerView = transitionContext?.containerView else { return }
+        guard let fromView = fromVc?.view else { return }
+        guard let toView = toVc?.view else { return }
+        guard let startView = self.startView?.snapshotView(afterScreenUpdates: false) else { return }
+        
+        containerView.addSubview(toView)
+        containerView.addSubview(startView)
+        
+        startView.frame  = self.startView?.convert(self.startView?.bounds ?? .zero, to: containerView) ?? .zero
+        toView.alpha = 0
+        self.startView?.isHidden = true
+        self.targetView?.isHidden = true
+        fromView.alpha = 1
+        
+        if type == .zoomSpring {
+            UIView.animate(withDuration: self.animationTime, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 20, options: UIView.AnimationOptions(rawValue: 0)) {
+                startView.frame  = self.targetView?.convert(self.targetView?.bounds ?? .zero, to: containerView) ?? .zero
+                toView.alpha = 1
+                fromView.alpha = 0
+            } completion: { finished in
+                startView.isHidden = true
+                self.startView?.isHidden = false
+                self.targetView?.isHidden = false
+                fromView.alpha = 1
+                
+                if self.transitionContext?.transitionWasCancelled ?? false {
+                    self.transitionContext?.completeTransition(false)
+                } else {
+                    self.transitionContext?.completeTransition(true)
+                }
+            }
+        } else if type == .zoomNormal {
+            UIView.animate(withDuration: self.animationTime) {
+                startView.frame  = self.targetView?.convert(self.targetView?.bounds ?? .zero, to: containerView) ?? .zero
+                toView.alpha = 1
+                fromView.alpha = 0
+            } completion: { finished in
+                startView.isHidden = true
+                self.startView?.isHidden = false
+                self.targetView?.isHidden = false
+                fromView.alpha = 1
+                
+                if self.transitionContext?.transitionWasCancelled ?? false {
+                    self.transitionContext?.completeTransition(false)
+                } else {
+                    self.transitionContext?.completeTransition(true)
+                }
+            }
+        }
+
+    }
+    
+    func zoomTransitionBackAnimation(type: XJTransitionAnimationType) {
+        guard let containerView = transitionContext?.containerView else { return }
+        guard let fromView = fromVc?.view else { return }
+        guard let toView = toVc?.view else { return }
+        guard let tempView = containerView.subviews.last else { return }
+        containerView.insertSubview(toView, at: 0)
+        
+        self.targetView?.isHidden = true
+        self.startView?.isHidden = true
+        
+        tempView.isHidden = false
+        toView.isHidden = false
+        toView.alpha = 1
+        fromView.alpha = 0
+        
+        tempView.frame  = self.targetView?.convert(self.targetView?.bounds ?? .zero, to: fromView) ?? .zero
+
+        if type == .zoomSpring {
+            UIView.animate(withDuration: self.animationTime, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 10, options: UIView.AnimationOptions(rawValue: 0)) {
+                tempView.frame  = self.startView?.convert(self.startView?.bounds ?? .zero, to: containerView) ?? .zero
+                toView.alpha = 1
+                fromView.alpha = 0
+            } completion: { finished in
+                if self.transitionContext?.transitionWasCancelled ?? false {
+                    self.transitionContext?.completeTransition(false)
+                    self.startView?.isHidden = false
+                    self.targetView?.isHidden = false
+                    tempView.isHidden = true
+                } else {
+                    self.transitionContext?.completeTransition(true)
+                    self.startView?.isHidden = false
+                    self.targetView?.isHidden = true
+                    toView.isHidden = false
+                    tempView.removeFromSuperview()
+                }
+                fromView.isHidden = false
+            }
+        } else if type == .zoomNormal {
+            UIView.animate(withDuration: self.animationTime) {
+                tempView.frame  = self.startView?.convert(self.startView?.bounds ?? .zero, to: containerView) ?? .zero
+                toView.alpha = 1
+                fromView.alpha = 0
+            } completion: { finished in
+                if self.transitionContext?.transitionWasCancelled ?? false {
+                    self.transitionContext?.completeTransition(false)
+                    self.startView?.isHidden = false
+                    self.targetView?.isHidden = false
+                    tempView.isHidden = true
+                } else {
+                    self.transitionContext?.completeTransition(true)
+                    self.startView?.isHidden = false
+                    self.targetView?.isHidden = true
+                    toView.isHidden = false
+                    tempView.removeFromSuperview()
+                }
+                fromView.isHidden = false
+            }
         }
     }
 }

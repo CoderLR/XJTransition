@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 // MARK: - 动画属性
 class XJTransitionProperty: NSObject {
@@ -21,6 +22,10 @@ class XJTransitionProperty: NSObject {
     
     /// push控制器是否隐藏导航栏
     var isPushHidenNav: Bool = true
+
+    /// Zoom动画从一个view转场到另一个view
+    var startView: UIView?
+    var targetView: UIView?
     
     override init() {
         
@@ -138,7 +143,8 @@ enum XJTransitionAnimationType: Int {
     case brickCloseHorizontal
     
     // 下面收边
-    case inside
+    case insideVertical
+    case insideHorizontal
     
     // 碎片效果
     case fragmentShowFromRight
@@ -163,6 +169,10 @@ enum XJTransitionAnimationType: Int {
     case presentFromLeft
     case presentFromBottom
     case presentFromTop
+    
+    // 大小变换
+    case zoomNormal
+    case zoomSpring
 }
 
 

@@ -113,6 +113,10 @@ extension XJRootViewController: UITableViewDelegate, UITableViewDataSource {
                 
                 self.present(presentVc, animated: true)
             }
+        } else if indexPath.section == 1 {
+            let collectionVc = XJCollectionViewController()
+            collectionVc.anitionType = indexPath.row == 0 ? .zoomNormal : .zoomSpring
+            self.navigationController?.pushViewController(collectionVc, animated: true)
         }
     }
 
@@ -155,11 +159,11 @@ extension XJRootViewController {
         var animationType: XJTransitionAnimationType = .normal
         
         // 系统动画
-        if indexPath.section == 1 {
+        if indexPath.section == 2 {
             animationType = XJTransitionAnimationType(rawValue: indexPath.row + 1) ?? .normal
             
         // 自定义动画
-        } else if indexPath.section == 2 {
+        } else if indexPath.section == 3 {
             animationType = XJTransitionAnimationType(rawValue: indexPath.row + 34) ?? .normal
         }
         
@@ -229,8 +233,8 @@ class Cell: UITableViewCell {
     // 设置标识
     func setBtnIndexPath(_ indexPath: IndexPath) {
        
-        pushBtn.isHidden = indexPath.section == 0 ? true : false
-        presentBtn.isHidden = indexPath.section == 0 ? true : false
+        pushBtn.isHidden = indexPath.section < 2 ? true : false
+        presentBtn.isHidden = indexPath.section < 2 ? true : false
         
         pushBtn.indexPath = indexPath
         presentBtn.indexPath = indexPath
@@ -328,14 +332,14 @@ class ListModel: NSObject {
         let list2 = ListModel()
         list2.title = "自定义动画"
         var models2: [Model] = []
-        for i in 0..<32 {
+        for i in 0..<33 {
             let names = ["Page Right", "Page Left", "Page Bottom", "Page Top",
                          "Cover",
                          "Spread Right", "Spread Left", "Spread Bottom", "Spread Top",
                          "Spread Point",
                          "Boom",
                          "Brick OpenV", "Brick OpenH", "Brick CloseV", "Brick CloseH",
-                         "Inside",
+                         "InsideV", "InsideH",
                          "FragmentShow Right", "FragmentShow Left", "FragmentShow Bottom", "FragmentShow Top",
                          "FragmentHide Right", "FragmentHide Left", "FragmentHide Bottom", "FragmentHide Top",
                          "Flip Right", "Flip Left", "Flip Bottom", "Flip Top",
@@ -363,7 +367,18 @@ class ListModel: NSObject {
         }
         list3.models = models3
         
-        return [list3, list1, list2]
+        let list4 = ListModel()
+        list4.title = "其他动画"
+        var models4: [Model] = []
+        for i in 0..<2 {
+            let names = ["Zoom Normal", "Zoom Spring"]
+            let model = Model()
+            model.name = names[i]
+            models4.append(model)
+        }
+        list4.models = models4
+        
+        return [list3, list4, list1, list2]
     }
 }
 
@@ -446,5 +461,11 @@ public extension UIColor {
         Scanner(string: gHex).scanHexInt32(&g)
         Scanner(string: bHex).scanHexInt32(&b)
         return (r: CGFloat(r), g: CGFloat(g), b: CGFloat(b))
+    }
+    
+    // MARK: 4.2、随机色
+    /// 随机色
+    static var randomColor: UIColor {
+        return UIColor(r: CGFloat(arc4random()%256), g: CGFloat(arc4random()%256), b: CGFloat(arc4random()%256), alpha: 1.0)
     }
 }
