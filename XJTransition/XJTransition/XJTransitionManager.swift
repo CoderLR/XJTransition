@@ -1423,7 +1423,7 @@ extension XJTransitionManager {
     
     func fragmentHideTransitionAnimation(type: XJTransitionAnimationType) {
         
-        guard let tempFromView = fromVc?.view?.snapshotView(afterScreenUpdates: false) else { return }
+//        guard let tempFromView = fromVc?.view?.snapshotView(afterScreenUpdates: false) else { return }
         
         guard let containerView = transitionContext?.containerView else { return }
         guard let fromView = fromVc?.view else { return }
@@ -1434,14 +1434,15 @@ extension XJTransitionManager {
         var fragmentViews: [UIView] = []
         
         let size = fromView.frame.size
-        let fragmentWidth: CGFloat = 30.0
+        let fragmentWidth: CGFloat = 20.0
         
         let rowNum: Int = Int(size.width / fragmentWidth + 1)
         let columNum: Int = Int(size.height / fragmentWidth + 1)
+        print("row = \(rowNum) colum = \(columNum)")
         for i in 0..<rowNum {
             for j in 0..<columNum {
                 let rect = CGRect(x: CGFloat(i) * fragmentWidth, y: CGFloat(j) * fragmentWidth, width: fragmentWidth, height: fragmentWidth)
-                guard let fragmentView = tempFromView.resizableSnapshotView(from: rect, afterScreenUpdates: false, withCapInsets: .zero) else { return }
+                guard let fragmentView = fromView.resizableSnapshotView(from: rect, afterScreenUpdates: false, withCapInsets: .zero) else { return }
                 fragmentView.frame = rect
                 containerView.addSubview(fragmentView)
                 fragmentViews.append(fragmentView)
@@ -1486,6 +1487,7 @@ extension XJTransitionManager {
     }
     
     func fragmentHideTransitionBackAnimation(type: XJTransitionAnimationType) {
+//        guard let tempToView = toVc?.view?.snapshotView(afterScreenUpdates: true) else { return }
         guard let containerView = transitionContext?.containerView else { return }
         guard let fromView = fromVc?.view else { return }
         guard let toView = toVc?.view else { return }
@@ -1498,10 +1500,11 @@ extension XJTransitionManager {
         var fragmentViews: [UIView] = []
         
         let size = fromView.frame.size
-        let fragmentWidth: CGFloat = 30.0
+        let fragmentWidth: CGFloat = 20.0
         
         let rowNum: Int = Int(size.width / fragmentWidth + 1)
         let columNum: Int = Int(size.height / fragmentWidth + 1)
+        print("row = \(rowNum) colum = \(columNum)")
         for i in 0..<rowNum {
             for j in 0..<columNum {
                 let rect = CGRect(x: CGFloat(i) * fragmentWidth, y: CGFloat(j) * fragmentWidth, width: fragmentWidth, height: fragmentWidth)
@@ -1522,6 +1525,7 @@ extension XJTransitionManager {
                 default: break
                 }
                 fragmentView.alpha = 0
+            
             }
         }
         

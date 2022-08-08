@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,34 +16,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="XJTransition" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nSM-lK-gwf">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="XJTransition" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nSM-lK-gwf">
                                 <rect key="frame" x="127" y="430" width="160" height="36"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="160" id="bKl-1E-HCp"/>
-                                    <constraint firstAttribute="height" constant="36" id="bVQ-A2-h9k"/>
+                                    <constraint firstAttribute="height" constant="36" id="HYJ-4W-SEF"/>
+                                    <constraint firstAttribute="width" constant="160" id="MpF-pE-aJq"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="https://github.com/CoderLR/XJTransition" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nfe-dU-iYR">
                                 <rect key="frame" x="20" y="831" width="374" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="OO7-aP-f9o"/>
+                                    <constraint firstAttribute="height" constant="21" id="nQv-P0-cQb"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="QDy-2h-Ckp">
+                                <rect key="frame" x="167" y="328" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="efQ-Ky-ldS"/>
+                                    <constraint firstAttribute="height" constant="80" id="pR6-KU-jTP"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="nSM-lK-gwf" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="CzI-aV-OQy"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Nfe-dU-iYR" secondAttribute="trailing" constant="20" id="G4W-KD-qE9"/>
-                            <constraint firstItem="Nfe-dU-iYR" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-10" id="P3f-FM-7Ha"/>
-                            <constraint firstItem="nSM-lK-gwf" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="W87-An-92x"/>
-                            <constraint firstItem="Nfe-dU-iYR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="eKa-dE-R3n"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Nfe-dU-iYR" secondAttribute="trailing" constant="20" id="3c9-SM-V1O"/>
+                            <constraint firstItem="Nfe-dU-iYR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="JSW-Y8-6rJ"/>
+                            <constraint firstItem="nSM-lK-gwf" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="cNN-pO-K69"/>
+                            <constraint firstItem="nSM-lK-gwf" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="czf-98-ibY"/>
+                            <constraint firstItem="QDy-2h-Ckp" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-80" id="jnO-Rb-Q2N"/>
+                            <constraint firstItem="QDy-2h-Ckp" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="uAk-qZ-Y5b"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Nfe-dU-iYR" secondAttribute="bottom" constant="10" id="v8U-bW-ed0"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -54,8 +62,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="logo" width="120" height="120"/>
     </resources>
 </document>
