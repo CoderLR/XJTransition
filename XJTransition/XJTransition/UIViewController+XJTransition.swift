@@ -17,14 +17,8 @@ extension UINavigationController {
         let property = XJTransitionProperty()
         property.animationType = animationType
         XJTransitionManager.shared.property = property
-        // 设置代理
-        self.delegate = viewController
-        // 默认使用自定义动画
-        viewController.isUseTransition = true
-        // 自定义交互
-        viewController.isInteractive = false
-        // 执行push
-        self.pushViewController(viewController, animated: true)
+        
+        self.xj_pushViewController(viewController: viewController, property: property)
     }
     
     /// 自定义push动画
@@ -37,7 +31,7 @@ extension UINavigationController {
         // 默认使用自定义动画
         viewController.isUseTransition = true
         // 自定义交互
-        viewController.isInteractive = false
+        viewController.isInteractive = true
         // 执行push
         self.pushViewController(viewController, animated: true)
     }
@@ -182,10 +176,11 @@ extension UIViewController :UINavigationControllerDelegate {
             XJTransitionManager.shared.transitionType = .pop
         }
         
+        
         // 添加互动交互
-        if isInteractive && operation == .push && !XJTransitionManager.shared.isSystemBack {
+        if self.isInteractive && operation == .push && !XJTransitionManager.shared.isSystemBack {
             let interactive = XJPercentDrivenInteractiveTransition.shared
-            interactive.addPanGesture(controller: self)
+            interactive.addPanGesture(controller: self, openEdgeGesture: true)
             interactive.transitionType = .pop
             interactive.gestureType = .right
             interactive.endInteractiveBlock = { finish in
@@ -227,96 +222,3 @@ extension UIViewController {
     }
 }
 
-// MARK: - 自定义手势交互
-class XJPercentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition {
-    
-    /// 手势类型
-    var gestureType: XJGestureType = .none
-    
-    /// 控制器操作方式
-    var transitionType: XJTransitionType = .none
-    
-    /// 操作控制器，需使用弱引用
-    weak var controller: UIViewController?
-    
-    var isInteractive: Bool = false
-    
-    /// 手势滑动进度
-    var percent: CGFloat = 0
-    
-    let screenW: CGFloat = UIScreen.main.bounds.size.width
-    let screenH: CGFloat = UIScreen.main.bounds.size.height
-    
-    /// 交互结束在XJTransitionManager执行一些操作
-    var endInteractiveBlock: ((_ success: Bool) -> Void)?
-    
-    /// 单例对象
-    static var shared = XJPercentDrivenInteractiveTransition()
-    
-    convenience init(type: XJGestureType) {
-        self.init()
-        
-        self.gestureType = type
-    }
-    
-    func addPanGesture(controller: UIViewController?) {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(panGesture(_:)))
-        self.controller = controller
-        self.controller?.view.addGestureRecognizer(pan)
-    }
-    
-    @objc func panGesture(_ pan: UIPanGestureRecognizer) {
-        self.percent = 0
-        
-        switch self.gestureType {
-        case .left:
-            let x = pan.translation(in: pan.view).x
-            percent = -(x / screenW)
-        case .right:
-            let x = pan.translation(in: pan.view).x
-            percent = (x / screenW)
-        case .down:
-            let y = pan.translation(in: pan.view).y
-            percent = (y / screenW)
-        case .up:
-            let y = pan.translation(in: pan.view).y
-            percent = -(y / screenW)
-        default: break
-        }
-        
-        switch pan.state {
-        case .began:
-            isInteractive = true
-            if transitionType == .dismiss {
-                controller?.dismiss(animated: true)
-            } else if transitionType == .pop {
-                controller?.navigationController?.popViewController(animated: true)
-            }
-            
-            break
-        case .changed:
-            
-            self.update(percent)
-            break
-        case.ended:
-            isInteractive = false
-            print("percent = \(self.percentComplete)")
-            if self.percentComplete >= 0.4 {
-                if let endInteractiveBlock = endInteractiveBlock {
-                    endInteractiveBlock(true)
-                }
-                self.finish()
-            } else {
-                if let endInteractiveBlock = endInteractiveBlock {
-                    endInteractiveBlock(false)
-                }
-                self.cancel()
-            }
-            break
-            
-        default:
-            self.cancel()
-            break
-        }
-    }
-}

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3689AA1E290246E80053B039 /* XJTransitionInteractive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3689AA1D290246E80053B039 /* XJTransitionInteractive.swift */; };
 		36AB056B28869F4E001EC4C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36AB056A28869F4E001EC4C6 /* AppDelegate.swift */; };
 		36AB057228869F4E001EC4C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 36AB057028869F4E001EC4C6 /* Main.storyboard */; };
 		36AB057428869F4F001EC4C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 36AB057328869F4F001EC4C6 /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3689AA1D290246E80053B039 /* XJTransitionInteractive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XJTransitionInteractive.swift; sourceTree = "<group>"; };
 		36AB056728869F4E001EC4C6 /* XJTransition.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XJTransition.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36AB056A28869F4E001EC4C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36AB057128869F4E001EC4C6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 				36AB05812886A03A001EC4C6 /* UIViewController+XJTransition.swift */,
 				36AB05822886A03A001EC4C6 /* XJTransitionManager.swift */,
 				36AB05832886A03A001EC4C6 /* XJTransitionConfig.swift */,
+				3689AA1D290246E80053B039 /* XJTransitionInteractive.swift */,
 			);
 			path = XJTransition;
 			sourceTree = "<group>";
@@ -165,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				36AB05882886A2A6001EC4C6 /* XJRootViewController.swift in Sources */,
+				3689AA1E290246E80053B039 /* XJTransitionInteractive.swift in Sources */,
 				36AB05842886A03A001EC4C6 /* UIViewController+XJTransition.swift in Sources */,
 				36AB056B28869F4E001EC4C6 /* AppDelegate.swift in Sources */,
 				36AB05852886A03A001EC4C6 /* XJTransitionManager.swift in Sources */,

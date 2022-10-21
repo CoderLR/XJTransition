@@ -7,7 +7,7 @@
 
 import UIKit
 
-class XJNavigationViewController: UINavigationController, UIGestureRecognizerDelegate {
+class XJNavigationViewController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,5 +70,11 @@ class XJNavigationViewController: UINavigationController, UIGestureRecognizerDel
         viewController.hidesBottomBarWhenPushed = true
         super.setViewControllers(viewControllers, animated: animated)
         viewControllers[0].hidesBottomBarWhenPushed = false
+    }
+}
+
+extension XJNavigationViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }

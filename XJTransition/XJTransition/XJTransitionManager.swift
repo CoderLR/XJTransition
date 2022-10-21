@@ -876,6 +876,7 @@ extension XJTransitionManager {
 // MARK: - brick动画
 extension XJTransitionManager {
     func brickOpenTransitionAnimation(type: XJTransitionAnimationType) {
+        print("brickOpen----\(type)")
         guard let containerView = transitionContext?.containerView else { return }
         guard let fromView = fromVc?.view else { return }
         guard let toView = toVc?.view else { return }
@@ -929,6 +930,7 @@ extension XJTransitionManager {
     }
     
     func brickOpenTransitionBackAnimation(type: XJTransitionAnimationType) {
+        print("brickClose----\(type)")
         guard let containerView = transitionContext?.containerView else { return }
         guard let fromView = fromVc?.view else { return }
         guard let toView = toVc?.view else { return }
